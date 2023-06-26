@@ -2,18 +2,17 @@
 Implementação do primeiro trabalho AWS/Linux- Estágio PB Compass Uol - com Terraform
 
 # :clipboard: Índice:
-- [Esquema do ambiente AWS](esquema-do-ambiente-aws)
+- [Esquema do ambiente AWS](#esquema-do-ambiente-aws)
 - [AWS com Terraform](#aws-com-terraform)
-  + [main.tf](#main.tf)
-  + [variables.tf](#variables.tf)
-  + [outputs.tf](#outputs.tf)
-  + [terraform.tfvars](#terraform.tfvars)
-  + [outputs.tf](#outputs.tf)
-  + [instance-keys-eip.tf](#instance-keys-eip.tf)
-  + [efs.tf](#efs.tf)
-  + [secgp.tf](#secgp.tf)
-  + [vpc-sub-tbroutes.tf](#vpc-sub-tbroutes.tf)
-- [Gerando uma chave pública](#gerando-uma-chave-pública)
+  + [main.tf](#maintf-heavy_check_mark)
+  + [variables.tf](#variablestf-heavy_check_mark)
+  + [terraform.tfvars](#terraformtfvars-heavy_check_mark)
+  + [outputs.tf](#outputstf-heavy_check_mark)
+  + [instance-keys-eip.tf](#instance-keys-eiptf-heavy_check_mark)
+  + [efs.tf](#efstf-heavy_check_mark)
+  + [secgp.tf](#secgptf-heavy_check_mark)
+  + [vpc-sub-tbroutes.tf](#vpc-sub-tbroutestf-heavy_check_mark)
+- [Gerando uma chave pública](#green_circle-gerando-uma-chave-pública)
 # Esquema do ambiente AWS:
 ![esquema-1](https://github.com/MuriloScheunemann/Compass1.1-nfs-terraform/assets/122695407/687958aa-a8a0-4466-a400-961338ddcf9e)
 # AWS com Terraform:
@@ -44,7 +43,7 @@ Saídas exibidas após a criação do ambiente:
 Descreve os resources de criação das **chave de acesso, instâncias EC2 e Elastic IP**
 ### Chave de acesso:
 * resource "aws_key_pair" "keypair"
-  * cria uma chave de acesso, a partir de uma chave pública. (Ver: [Gerando uma chave pública](#gerando-uma-chave-pública))
+  * cria uma chave de acesso, a partir de uma chave pública. (Ver: [Gerando uma chave pública](#green_circle-gerando-uma-chave-pública))
 ### Instância(s) EC2:
 * resource "aws_instance" "instances":
   * cria uma quantidade (uma ou mais) de instâncias iguais (tipo, AMI, chave, SG, VPC, Subnet, AZ) definida na variável *qtd_instancias*, com um Elastic IP;
@@ -103,6 +102,15 @@ Descreve os resources de criação da **VPC, Subnet, Internet Gateway, Route Tab
 
 ## :green_circle: Gerando uma chave pública:
 Na seção de criação do recurso key pair, foi mencionado que é necessária uma chave pública para criar uma key pair na AWS. O tutorial a seguir mostra como gerá-la:
-- Com Puttygen:
-- Com ssh-keygen:
+### Com Puttygen:
+* Acesso SSH com máquina Windows, via Putty:
+1. Abrir o Puttygen; selecionar tipo RSA, 2048 bits(outros valores funcionam também, mas este é o padrão);
+2. Clicar em 'generate' para gerar uma nova chave;
+3. Após a geração da chave, salvar a public key na mesma pasta do projeto Terraform e salvar a private key num local seguro na máquina local;
+  + A chave pública será usada pelo Terraform para gerar uma nova key pair na AWS, enquanto a chave privada será usada para acessar as instâncias EC2 via SSH
+### Com ssh-keygen:
+* Acesso SSH com máquina Linux, via OpenSSH:
+1. No terminal, executar: ssh-keygen -t rsa -b 2048;
+2. Salvar as chaves criadas na máquina local (por padrão, serão salvas em .ssh, no diretório home do usuário que criou. Exemplo: usuário = murilo --> /home/murilo/.ssh/);
+3. Copiar a chave pública id_rsa.pub para a mesma pasta do projeto Terraform
 
